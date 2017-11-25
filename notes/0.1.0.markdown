@@ -1,1 +1,6 @@
-First minimal release
+This project contains only a few manually written facades for some Atom-related APIs. Currently it exists solely for the needs of the [atom-ide-scala](https://github.com/laughedelic/atom-ide-scala) project and will be extended on demand.
+
+* [atom-ide-ui](https://github.com/facebook-atom/atom-ide-ui)
+  + [atom-ide-busy-signal](https://github.com/facebook-atom/atom-ide-ui/tree/master/modules/atom-ide-ui/pkg/atom-ide-busy-signal)
+* [atom-languageclient](https://github.com/atom/atom-languageclient)
+  + only [`AutoLanguageClient`](https://github.com/atom/atom-languageclient/blob/master/lib/auto-languageclient.js)
