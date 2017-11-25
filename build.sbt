@@ -32,6 +32,7 @@ libraryDependencies += "io.scalajs" %%% "nodejs" % "0.4.2"
 
 releaseEarlyWith := BintrayPublisher
 releaseEarlyEnableSyncToMaven := false
+releaseEarlyNoGpg := true
 
 publishMavenStyle := true
 bintrayReleaseOnPublish := !isSnapshot.value
