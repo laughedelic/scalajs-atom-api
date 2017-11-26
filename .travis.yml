@@ -7,6 +7,9 @@ stages:
   - name: release
     if: ((branch = master) AND (type != pull_request)) OR (tag IS present)
 
+branches:
+  only: master
+
 jobs:
   include:
     # default stage is test
