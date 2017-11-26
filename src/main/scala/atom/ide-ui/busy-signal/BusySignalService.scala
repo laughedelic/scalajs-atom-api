@@ -1,10 +1,9 @@
-package laughedelic.atom.ide.scala.facade.atom_ide.busy_signal
+package laughedelic.atom.ide.ui.busysignal
 
 import scala.scalajs.js, js.annotation._
 
 // https://github.com/facebook-atom/atom-ide-ui/blob/master/modules/atom-ide-ui/pkg/atom-ide-busy-signal/lib/types.js
-@js.native
-@JSImport("atom-ide-busy-signal", "BusyMessage")
+@js.native @JSImport("atom-ide-busy-signal", "BusyMessage")
 class BusySignalService extends js.Object {
 
   // Activates the busy signal with the given title and returns the promise

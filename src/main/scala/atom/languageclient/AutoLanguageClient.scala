@@ -1,10 +1,10 @@
-package laughedelic.atom.ide.scala.facade.atom_languageclient
+package laughedelic.atom.languageclient
 
-import scala.scalajs.js, js.annotation._
+import scala.scalajs.js, js.annotation._, js.|
 import io.scalajs.nodejs.child_process.ChildProcess
 
-@js.native
-@JSImport("atom-languageclient", "AutoLanguageClient")
+// https://github.com/atom/atom-languageclient/blob/master/lib/auto-languageclient.js
+@js.native @JSImport("atom-languageclient", "AutoLanguageClient")
 class AutoLanguageClient extends js.Object {
   // Methods to export for Atom
   def activate(): Unit = js.native
@@ -25,7 +25,7 @@ class AutoLanguageClient extends js.Object {
   def getGrammarScopes(): js.Array[String] = js.native
   def getLanguageName(): String = js.native
   def getServerName(): String = js.native
-  def startServerProcess(projectPath: String): ChildProcess = js.native
+  def startServerProcess(projectPath: String): ChildProcess | js.Promise[ChildProcess] = js.native
 
   // Rest
   val processStdErr: String = js.native
