@@ -37,3 +37,5 @@ releaseEarlyNoGpg := true
 publishMavenStyle := true
 bintrayReleaseOnPublish := !isSnapshot.value
 bintrayPackageLabels := Seq("scalajs", "atom", "facades")
+
+ghreleaseAssets := Seq()
