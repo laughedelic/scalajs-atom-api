@@ -18,8 +18,7 @@ This project contains only a few manually written facades for some Atom-related 
 ## Usage
 
 ```scala
-resolvers += Resolver.bintrayRepo("laughedelic", "maven")
-
+resolvers += Resolver.jcenterRepo
 libraryDependencies += "laughedelic" %%% "scalajs-atom-api" % "<version>"
 ```
 
