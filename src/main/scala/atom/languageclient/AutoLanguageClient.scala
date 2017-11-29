@@ -15,6 +15,7 @@ class AutoLanguageClient extends js.Object {
   def provideDefinitions(): js.Any = js.native
   def provideCodeFormat(): js.Any = js.native
   def provideAutocomplete(): js.Any = js.native
+  def provideFindReferences(): js.Any = js.native
 
   // Consumers
   def consumeDatatip(service: js.Any): Unit = js.native
