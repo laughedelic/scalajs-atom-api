@@ -31,7 +31,7 @@ class AutoLanguageClient extends js.Object {
   def consumeDatatip(service: js.Any): Unit = js.native
   def consumeLinterV2(registerIndie: js.Any): Unit = js.native
   def consumeSignatureHelp(registry: js.Any): js.Any = js.native
-  def consumeBusySignal(service: busysignal.BusySignalService): js.Any = js.native
+  def consumeBusySignal(service: js.Any): js.Any = js.native
 
   // ---------------------------------------------------------------------------
   // Methods obligatory to override
