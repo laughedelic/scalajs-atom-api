@@ -1,0 +1,5 @@
+* #2: Completed `AutoLanguageClient` facade:
+  - most useful methods that you would use directly or want to override
+  - and all service providers/consumers
+  - added `Logger` trait
+  - fixed `BusySignalService` (now `AutoLanguageClient` has an instance of it)
