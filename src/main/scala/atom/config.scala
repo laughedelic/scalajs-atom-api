@@ -2,24 +2,24 @@ package laughedelic.atom.ide.scala
 
 import scala.scalajs.js, js.annotation._, js.Dynamic.global, js.|
 
-sealed trait AnyOptionType extends js.Object {
-  type ValType
-  val valType: String
-}
+class OptionType[T](
+  val name: String,
+  val itemsType: js.UndefOr[String] = js.undefined,
+)
 
-sealed trait AnyPrimitiveOptionType extends AnyOptionType
-sealed abstract class PrimitiveOptionType[T](val valType: String)
-  extends AnyPrimitiveOptionType { type ValType = T }
+object OptionType {
+  implicit val string:  OptionType[String]  = new OptionType[String]("string")
+  implicit val integer: OptionType[Int]     = new OptionType[Int]("integer")
+  implicit val number:  OptionType[Double]  = new OptionType[Double]("number")
+  implicit val boolean: OptionType[Boolean] = new OptionType[Boolean]("boolean")
+  // TODO: Color option (returns Color type from Atom core API)
 
-object string  extends PrimitiveOptionType[String]("string")
-object integer extends PrimitiveOptionType[Int]("integer")
-object number  extends PrimitiveOptionType[Double]("number")
-object boolean extends PrimitiveOptionType[Boolean]("boolean")
-// TODO: Color option (returns Color type from Atom core API)
-
-class array[IT <: AnyPrimitiveOptionType](val itemsType: IT) extends AnyOptionType {
-  type ValType = js.Array[IT#ValType]
-  val valType = "array"
+  implicit def array[T](
+    implicit tpe: OptionType[T]
+  ): OptionType[js.Array[T]] = new OptionType[js.Array[T]](
+    name = "array",
+    itemsType = tpe.name,
+  )
 }
 
 class AllowedValue[V](
@@ -27,51 +27,42 @@ class AllowedValue[V](
   val description: js.UndefOr[String] = js.undefined
 ) extends js.Object
 
-abstract class AnyConfigOption extends js.Object {
-  type Tpe <: AnyOptionType
-  // val  tpe: Tpe
-  // final val `type`: String = tpe.valType
-
-  val title: String
-  val default: Tpe#ValType
-
-  val description: js.UndefOr[String]
-  val order: js.UndefOr[Int]
-}
-
-class Opt[T <: AnyOptionType](
-  tpe: T,
+class Opt[T](
   val title: String,
-  val default: T#ValType,
+  val default: T,
   val description: js.UndefOr[String] = js.undefined,
   val order: js.UndefOr[Int] = js.undefined,
-  val enum: js.UndefOr[js.Array[AllowedValue[T#ValType]]] = js.undefined,
-  val minimum: js.UndefOr[T#ValType] = js.undefined,
-  val maximum: js.UndefOr[T#ValType] = js.undefined,
+  val enum: js.UndefOr[js.Array[AllowedValue[T]]] = js.undefined,
+  val minimum: js.UndefOr[T] = js.undefined,
+  val maximum: js.UndefOr[T] = js.undefined,
+)(implicit tpe: OptionType[T]) extends js.Object {
+  final val `type`: String = tpe.name
+
+  final val items = tpe.itemsType.map { it =>
+    js.Dynamic.literal(
+      `type` = it,
+      minimum = minimum.asInstanceOf[js.Any],
+      maximum = maximum.asInstanceOf[js.Any],
+    )
+  }
+}
+
+class Group[P <: js.Object](
+  val title: String,
+  val properties: P,
+  val description: js.UndefOr[String] = js.undefined,
+  val order: js.UndefOr[Int] = js.undefined,
 ) extends js.Object {
-  type Tpe = T
-  final val `type`: String = tpe.valType
+  final val `type`: String = "object"
 }
 
-class ArrayOpt[T <: AnyPrimitiveOptionType](
-  tpe: T,
-  val title: String,
-  val default: js.Array[T#ValType],
-  val description: js.UndefOr[String] = js.undefined,
-  val order: js.UndefOr[Int] = js.undefined,
-  val minimum: js.UndefOr[T#ValType] = js.undefined,
-  val maximum: js.UndefOr[T#ValType] = js.undefined,
-) extends AnyConfigOption {
-  type Tpe = array[T]
-  // final val tpe = new array(tpe)
-  final val `type`: String = "array"
-
-  final val items = js.Dynamic.literal(
-    `type` = tpe.valType,
-    minimum = minimum.asInstanceOf[js.Any],
-    maximum = maximum.asInstanceOf[js.Any],
-  )
+object Group {
+  implicit def groupProps[P <: js.Object](gr: Group[P]): P = gr.properties
 }
+
+  // def properties() =
+  //   this.asInstanceOf[js.Dictionary[js.Any]]
+  //     .filter { case (_, value) => value.isInstanceOf[js.Object] }
 
 object ServerTypes {
   val Scalameta = new AllowedValue[String](
@@ -85,9 +76,22 @@ object ServerTypes {
   )
 }
 
+class jvmOpts extends js.Object {
+  val javaOpts = new Opt[js.Array[String]](
+    title = "Extra JVM options",
+    default = js.Array()
+  )
+
+  val javaHome = new Opt[String](
+    title = "Java Home",
+    description = "Plugin will try to guess your Java Home path, but if you have a very specific setup you can use this option to set it explicitly",
+    default = "",
+  )
+}
+
 object Config extends js.Object {
 
-  val serverType = new Opt(string,
+  val serverType = new Opt[String](
     title = "Language Server Type",
     description = "Don't change this option unless you know what you're doing",
     default = ServerTypes.Scalameta.value,
@@ -98,21 +102,16 @@ object Config extends js.Object {
     ),
   )
 
-  val serverVersion = new Opt(string,
+  val serverVersion = new Opt[String](
     title = "Language Server Version",
     default = "5ddb92a9",
     order = 2,
   )
 
-  val javaOpts = new ArrayOpt(string,
-    title = "Extra JVM options",
-    default = js.Array()
-  )
-
-  val javaHome = new Opt(string,
-    title = "Java Home",
-    description = "Plugin will try to guess your Java Home path, but if you have a very specific setup you can use this option to set it explicitly",
-    default = "",
+  val jvm = new Group(
+    title = "Java-related settings",
+    order = 3,
+    properties = new jvmOpts
   )
 
 }
