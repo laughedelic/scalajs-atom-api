@@ -2,21 +2,21 @@ package laughedelic.atom.ide.scala
 
 import scala.scalajs.js, js.annotation._, js.Dynamic.global, js.|
 
-class OptionType[T](
+class SettingType[T](
   val name: String,
   val itemsType: js.UndefOr[String] = js.undefined,
 )
 
-object OptionType {
-  implicit val string:  OptionType[String]  = new OptionType[String]("string")
-  implicit val integer: OptionType[Int]     = new OptionType[Int]("integer")
-  implicit val number:  OptionType[Double]  = new OptionType[Double]("number")
-  implicit val boolean: OptionType[Boolean] = new OptionType[Boolean]("boolean")
+object SettingType {
+  implicit val string:  SettingType[String]  = new SettingType[String]("string")
+  implicit val integer: SettingType[Int]     = new SettingType[Int]("integer")
+  implicit val number:  SettingType[Double]  = new SettingType[Double]("number")
+  implicit val boolean: SettingType[Boolean] = new SettingType[Boolean]("boolean")
   // TODO: Color option (returns Color type from Atom core API)
 
   implicit def array[T](
-    implicit tpe: OptionType[T]
-  ): OptionType[js.Array[T]] = new OptionType[js.Array[T]](
+    implicit tpe: SettingType[T]
+  ): SettingType[js.Array[T]] = new SettingType[js.Array[T]](
     name = "array",
     itemsType = tpe.name,
   )
@@ -27,15 +27,15 @@ class AllowedValue[V](
   val description: js.UndefOr[String] = js.undefined
 ) extends js.Object
 
-class Opt[T](
+class Setting[T](
   val title: String,
   val default: T,
   val description: js.UndefOr[String] = js.undefined,
   val order: js.UndefOr[Int] = js.undefined,
-  val enum: js.UndefOr[js.Array[AllowedValue[T]]] = js.undefined,
+  val enum: js.UndefOr[js.Array[AllowedValue[T]] | js.Array[T]] = js.undefined,
   val minimum: js.UndefOr[T] = js.undefined,
   val maximum: js.UndefOr[T] = js.undefined,
-)(implicit tpe: OptionType[T]) extends js.Object {
+)(implicit tpe: SettingType[T]) extends js.Object {
   final val `type`: String = tpe.name
 
   final val items = tpe.itemsType.map { it =>
