@@ -5,6 +5,7 @@ import io.scalajs.RawOptions
 import io.scalajs.nodejs.{ child_process => cp }
 import io.scalajs.nodejs.net
 import laughedelic.atom.ide.ui.busysignal
+import laughedelic.atom.TextEditor
 
 // https://github.com/atom/atom-languageclient/blob/master/lib/auto-languageclient.js
 @js.native @JSImport("atom-languageclient", "AutoLanguageClient")
@@ -87,10 +88,10 @@ class AutoLanguageClient extends js.Object {
   def handleSpawnFailure(err: js.Any): Unit = js.native
 
   // TODO: editor: atom$TextEditor
-  def shouldSyncForEditor(editor: js.Any, projectPath: String): Boolean = js.native
+  def shouldSyncForEditor(editor: TextEditor, projectPath: String): Boolean = js.native
 
   // TODO: editor: atom$TextEditor
-  def isFileInProject(editor: js.Any, projectPath: String): Boolean = js.native
+  def isFileInProject(editor: TextEditor, projectPath: String): Boolean = js.native
 
   /** `didChangeWatchedFiles` message filtering, override for custom logic.
    * @param filePath path of a file that has changed in the project path
