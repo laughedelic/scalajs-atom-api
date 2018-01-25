@@ -3,7 +3,18 @@ package laughedelic.atom
 import scala.scalajs.js, js.annotation._
 
 @js.native
-trait Model extends js.Object{
+trait Disposable extends js.Object {
+  def dispose(): Unit = js.native
+}
+
+@js.native
+trait CommandRegistry extends js.Object {
+  def add(target: String, commandName: String, callback: js.UndefOr[js.Any => js.Any]): Unit = js.native
+  def add(target: String, commands: js.Dictionary[js.Any => js.Any], callback: js.UndefOr[js.Any => js.Any]): Unit = js.native
+}
+
+@js.native
+trait Model extends js.Object {
   def destroy(): Unit = js.native
   def isDestroyed(): Boolean = js.native
 }
@@ -37,12 +48,6 @@ trait TextEditor extends Model {
   // Reading Text
   def getText(): String = js.native
   def getLineCount(): Long = js.native
-}
-
-
-@js.native
-trait Disposable extends js.Object {
-  def dispose(): Unit = js.native
 }
   
 @js.native
@@ -97,6 +102,7 @@ trait NotificationManager extends js.Object {
 @js.native
 @JSGlobal("atom")
 object Atom extends js.Object {
+  val commands: CommandRegistry = js.native
   val config: Config = js.native
   val notifications: NotificationManager = js.native
   
