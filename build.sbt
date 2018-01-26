@@ -28,7 +28,10 @@ scalacOptions ++= Seq(
 
 enablePlugins(ScalaJSPlugin)
 
-libraryDependencies += "io.scalajs" %%% "nodejs" % "0.4.2"
+libraryDependencies ++= Seq(
+  "io.scalajs" %%% "nodejs" % "0.4.2",
+  "org.scala-js" %%% "scalajs-dom" % "0.9.4"
+)
 
 releaseEarlyWith := BintrayPublisher
 releaseEarlyEnableSyncToMaven := false

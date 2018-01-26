@@ -1,6 +1,8 @@
 package laughedelic.atom
 
+import org.scalajs.dom._
 import scala.scalajs.js, js.annotation._
+
 
 @js.native
 trait Disposable extends js.Object {
@@ -9,19 +11,15 @@ trait Disposable extends js.Object {
 
 @js.native
 trait CommandRegistry extends js.Object {
-  def add(target: String, commandName: String, callback: js.UndefOr[js.Any => js.Any]): Unit = js.native
-  def add(target: String, commands: js.Dictionary[js.Any => js.Any], callback: js.UndefOr[js.Any => js.Any]): Unit = js.native
+  def add(target: String, commandName: String, callback: js.UndefOr[js.Any => js.Any]): Disposable = js.native
+  def add(target: Element, commandName: String, callback: js.UndefOr[js.Any => js.Any]): Disposable = js.native
+  def add(target: String, commands: js.Dictionary[js.Any => js.Any]): Disposable = js.native
+  def add(target: Element, commands: js.Dictionary[js.Any => js.Any]): Disposable = js.native
+  def dispatch(target: Element, commandName: String): Unit = js.native
 }
 
 @js.native
-trait Model extends js.Object {
-  def destroy(): Unit = js.native
-  def isDestroyed(): Boolean = js.native
-}
-
-
-@js.native
-trait TextEditor extends Model {
+trait TextEditor extends js.Object {
   val id: Long = js.native
   
   val firstVisibleScreenRow: Long = js.native
@@ -49,23 +47,29 @@ trait TextEditor extends Model {
   def getText(): String = js.native
   def getLineCount(): Long = js.native
 }
+
+@JSExportAll
+case class ConfigOptions (
+  sources: js.UndefOr[js.Array[String]] = js.undefined,
+  excludeSources: js.UndefOr[js.Array[String]] = js.undefined
+)
   
 @js.native
 trait ConfigChange extends js.Object {
   val newValue: js.Any = js.native
-  val oldValue: js.UndefOr[js.Any] = js.native
+  val oldValue: js.Any = js.native
 }
 
 @js.native
 trait Config extends js.Object {
   
-  def observe(keyPath: String, callback: ConfigChange => Unit): Disposable = js.native
+  def observe(keyPath: String, callback: js.Any => Unit): Disposable = js.native
   def onDidChange(callback: ConfigChange => Unit): Disposable = js.native
   def onDidChange(keyPath: String, callback: ConfigChange => Unit): Disposable = js.native
   
-  def get(key: String): js.Any = js.native
-  def set(key: String, value: js.UndefOr[js.Any] = js.undefined): Boolean = js.native
-  def unset(key: String): Boolean = js.native
+  def get(key: String, options: js.UndefOr[ConfigOptions] = js.undefined): js.Any = js.native
+  def set(key: String, value: js.UndefOr[js.Any] = js.undefined, options: js.UndefOr[ConfigOptions] = js.undefined): Boolean = js.native
+  def unset(key: String, options: js.UndefOr[ConfigOptions] = js.undefined): Boolean = js.native
 }
 
 @js.native
@@ -78,11 +82,19 @@ trait Notification extends js.Object {
 }
 
 @JSExportAll
+case class NotificationButton(
+  className: js.UndefOr[String] = js.undefined,
+  onDidClick: js.UndefOr[() => Unit] = js.undefined,
+  text: js.UndefOr[String] = js.undefined
+)
+
+@JSExportAll
 case class NotificationOptions(
   detail: js.UndefOr[String] = js.undefined,
   dismissable: js.UndefOr[Boolean] = js.undefined,
   description: js.UndefOr[String] = js.undefined,
-  icon: js.UndefOr[String] = js.undefined
+  icon: js.UndefOr[String] = js.undefined,
+  buttons: js.UndefOr[js.Array[NotificationButton]] = js.undefined
 )
 
 @js.native
