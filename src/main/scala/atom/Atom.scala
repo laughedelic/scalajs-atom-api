@@ -1,7 +1,7 @@
 package laughedelic.atom
 
 import org.scalajs.dom._
-import scala.scalajs.js, js.annotation._
+import scala.scalajs.js, js.annotation._, js.|
 
 
 @js.native
@@ -11,10 +11,8 @@ trait Disposable extends js.Object {
 
 @js.native
 trait CommandRegistry extends js.Object {
-  def add(target: String, commandName: String, callback: js.UndefOr[js.Any => js.Any]): Disposable = js.native
-  def add(target: Element, commandName: String, callback: js.UndefOr[js.Any => js.Any]): Disposable = js.native
-  def add(target: String, commands: js.Dictionary[js.Any => js.Any]): Disposable = js.native
-  def add(target: Element, commands: js.Dictionary[js.Any => js.Any]): Disposable = js.native
+  def add(target: String | Element, commandName: String, callback: js.Any => js.Any = js.native): Disposable = js.native
+  def add(target: String | Element, commands: js.Dictionary[js.Any => js.Any]): Disposable = js.native
   def dispatch(target: Element, commandName: String): Unit = js.native
 }
 
@@ -48,11 +46,10 @@ trait TextEditor extends js.Object {
   def getLineCount(): Long = js.native
 }
 
-@JSExportAll
-case class ConfigOptions (
+class ConfigOptions (
   sources: js.UndefOr[js.Array[String]] = js.undefined,
   excludeSources: js.UndefOr[js.Array[String]] = js.undefined
-)
+) extends js.Object
   
 @js.native
 trait ConfigChange extends js.Object {
@@ -67,9 +64,9 @@ trait Config extends js.Object {
   def onDidChange(callback: ConfigChange => Unit): Disposable = js.native
   def onDidChange(keyPath: String, callback: ConfigChange => Unit): Disposable = js.native
   
-  def get(key: String, options: js.UndefOr[ConfigOptions] = js.undefined): js.Any = js.native
-  def set(key: String, value: js.UndefOr[js.Any] = js.undefined, options: js.UndefOr[ConfigOptions] = js.undefined): Boolean = js.native
-  def unset(key: String, options: js.UndefOr[ConfigOptions] = js.undefined): Boolean = js.native
+  def get(key: String, options: ConfigOptions = js.native): js.Any = js.native
+  def set(key: String, value: js.Any = js.native, options: ConfigOptions = js.native): Boolean = js.native
+  def unset(key: String, options: ConfigOptions = js.native): Boolean = js.native
 }
 
 @js.native
@@ -77,35 +74,34 @@ trait Notification extends js.Object {
   // Methods
   def getType(): String = js.native
   def getMessage(): String = js.native
-  def getOptions(): js.Object = js.native
   def dismiss(): Unit = js.native
 }
 
-@JSExportAll
-case class NotificationButton(
+class NotificationButton(
   className: js.UndefOr[String] = js.undefined,
   onDidClick: js.UndefOr[() => Unit] = js.undefined,
   text: js.UndefOr[String] = js.undefined
-)
+) extends js.Object
 
-@JSExportAll
-case class NotificationOptions(
+class NotificationOptions(
   detail: js.UndefOr[String] = js.undefined,
   dismissable: js.UndefOr[Boolean] = js.undefined,
   description: js.UndefOr[String] = js.undefined,
   icon: js.UndefOr[String] = js.undefined,
   buttons: js.UndefOr[js.Array[NotificationButton]] = js.undefined
-)
+) extends js.Object
 
 @js.native
 trait NotificationManager extends js.Object {
+
+  def onDidAddNotification(callback: Notification => Unit): Disposable = js.native
   
   // Adding Notifications
-  def addInfo(msg: String, options: js.UndefOr[NotificationOptions] = js.undefined): Notification = js.native
-  def addError(msg: String, options: js.UndefOr[NotificationOptions] = js.undefined): Notification = js.native
-  def addFatalError(msg: String, options: js.UndefOr[NotificationOptions] = js.undefined): Notification = js.native
-  def addSuccess(msg: String, options: js.UndefOr[NotificationOptions] = js.undefined): Notification = js.native
-  def addWarning(msg: String, options: js.UndefOr[NotificationOptions] = js.undefined): Notification = js.native
+  def addInfo(msg: String, options: NotificationOptions = js.native): Notification = js.native
+  def addError(msg: String, options: NotificationOptions = js.native): Notification = js.native
+  def addFatalError(msg: String, options: NotificationOptions = js.native): Notification = js.native
+  def addSuccess(msg: String, options: NotificationOptions = js.native): Notification = js.native
+  def addWarning(msg: String, options: NotificationOptions = js.native): Notification = js.native
   
   // Getting Notifications
   def getNotifications(): js.Array[Notification] = js.native
