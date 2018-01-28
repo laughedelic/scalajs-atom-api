@@ -5,6 +5,7 @@ import io.scalajs.RawOptions
 import io.scalajs.nodejs.{ child_process => cp }
 import io.scalajs.nodejs.net
 import laughedelic.atom.ide.ui.busysignal
+import laughedelic.atom.TextEditor
 
 // https://github.com/atom/atom-languageclient/blob/master/lib/auto-languageclient.js
 @js.native @JSImport("atom-languageclient", "AutoLanguageClient")
@@ -53,8 +54,7 @@ class AutoLanguageClient extends js.Object {
   val busySignalService: js.UndefOr[busysignal.BusySignalService] = js.native
 
   /** Determine whether we should start a server for a given editor if we don't have one yet */
-  // TODO: editor: atom$TextEditor
-  def shouldStartForEditor(editor: js.Any): Boolean = js.native
+  def shouldStartForEditor(editor: TextEditor): Boolean = js.native
 
   /** Return the parameters used to initialize a client - you may want to extend capabilities */
   // TODO: return ls.InitializeParams
@@ -86,11 +86,9 @@ class AutoLanguageClient extends js.Object {
   def captureServerErrors(childProcess: cp.ChildProcess): Unit = js.native
   def handleSpawnFailure(err: js.Any): Unit = js.native
 
-  // TODO: editor: atom$TextEditor
-  def shouldSyncForEditor(editor: js.Any, projectPath: String): Boolean = js.native
+  def shouldSyncForEditor(editor: TextEditor, projectPath: String): Boolean = js.native
 
-  // TODO: editor: atom$TextEditor
-  def isFileInProject(editor: js.Any, projectPath: String): Boolean = js.native
+  def isFileInProject(editor: TextEditor, projectPath: String): Boolean = js.native
 
   /** `didChangeWatchedFiles` message filtering, override for custom logic.
    * @param filePath path of a file that has changed in the project path
