@@ -64,7 +64,6 @@ class AutoLanguageClient extends js.Object {
   def preInitialization(connection: LanguageClientConnection): Unit = js.native
 
   /** Late wire-up of listeners after initialize method has been sent */
-
   def postInitialization(server: ActiveServer): Unit = js.native
 
   /** Determine whether to use ipc, stdio or socket to connect to the server */
