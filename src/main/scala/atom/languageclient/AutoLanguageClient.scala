@@ -95,4 +95,7 @@ class AutoLanguageClient extends js.Object {
    * @return false => message will not be sent to the language server
    */
   def filterChangeWatchedFiles(filePath: String): Boolean = js.native
+  
+  // Gets a LanguageClientConnection for a given TextEditor
+  def getConnectionForEditor(editor: TextEditor): js.Promise[js.UndefOr[LanguageClientConnection]] = js.native
 }
