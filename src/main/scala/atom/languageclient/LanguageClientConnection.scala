@@ -1,7 +1,7 @@
 package laughedelic.atom.languageclient
 
 import io.scalajs.nodejs.events.EventEmitter
-import scala.scalajs.js
+import scala.scalajs.js, js.annotation._
 
 // Public: Parameters to send with a workspace/executeCommand request.
 class ExecuteCommandParams (
@@ -11,8 +11,8 @@ class ExecuteCommandParams (
   val arguments: js.UndefOr[js.Array[js.Any]] = js.undefined
 ) extends js.Object
 
-@js.native 
-trait LanguageClientConnection extends EventEmitter {
+@js.native @JSImport("atom-languageclient", "LanguageClientConnection")
+class LanguageClientConnection extends EventEmitter {
 
   // Public: Send a `workspace/executeCommand` request.
   //
