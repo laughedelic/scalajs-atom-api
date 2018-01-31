@@ -46,10 +46,7 @@ class CommandListener(
   val displayName: js.UndefOr[String] = js.undefined,
   val description: js.UndefOr[String] = js.undefined,
   val hiddenInCommandPalette: js.UndefOr[Boolean] = js.undefined
-)(callback: js.Function1[js.Any, Unit]) extends js.Object {
-
-  def didDispatch(event: js.Any): Unit = callback(event)
-}
+)(val didDispatch: js.Function1[js.Any, Unit]) extends js.Object
 
 @js.native
 trait CommandRegistry extends js.Object {
@@ -187,16 +184,16 @@ trait NotificationManager extends js.Object {
   def getNotifications(): js.Array[Notification] = js.native
 }
 
-class MenuOptions(
+class MenuItem (
   val label: String,
-  val submenu: js.UndefOr[js.Array[MenuOptions]] = js.undefined,
+  val submenu: js.UndefOr[js.Array[MenuItem]] = js.undefined,
   val command: js.UndefOr[String] = js.undefined
 ) extends js.Object
 
 @js.native
 trait MenuManager extends js.Object {
   /* Adds the given items to the application menu. */
-  def add(items: js.Array[MenuOptions]): Disposable = js.native
+  def add(items: js.Array[MenuItem]): Disposable = js.native
     
   /* Refreshes the currently visible menu. */
   def update(): Unit = js.native
