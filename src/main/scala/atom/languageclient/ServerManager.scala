@@ -38,7 +38,7 @@ trait DocumentLinkOptions extends js.Object {
 @js.native
 trait ExecuteCommandOptions extends js.Object {
   // The commands to be executed on the server
-  val commands: js.UndefOr[js.Array[String]] = js.native
+  val commands: js.Array[String] = js.native
 }
 
 // Document save options.
@@ -96,7 +96,7 @@ trait ServerCapabilities extends js.Object {
   // The server provides code actions.
   val codeActionProvider: js.UndefOr[Boolean] = js.native
   // The server provides code lens.
-  val odeLensProvider: js.UndefOr[CodeLensOptions] = js.native
+  val codeLensProvider: js.UndefOr[CodeLensOptions] = js.native
   // The server provides document formatting.
   val documentFormattingProvider: js.UndefOr[Boolean] = js.native
   // The server provides document range formatting.
