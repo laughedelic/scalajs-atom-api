@@ -2,11 +2,6 @@ package laughedelic.atom
 
 import scala.scalajs.js
 
-
-trait DisposableLike extends js.Object {
-  def dispose(): Unit
-}
-
 /**
   * A handle to a resource that can be disposed. For example, Emitter::on
   * returns disposables representing subscriptions.
