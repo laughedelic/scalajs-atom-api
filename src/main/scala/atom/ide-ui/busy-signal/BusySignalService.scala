@@ -12,7 +12,7 @@ class BusySignalService extends js.Object {
   // either resolves or rejects.
   def reportBusyWhile[T](
     title: String,
-    f: () => js.Promise[T],
+    f: js.Function1[Unit, js.Promise[T]],
     // options?: BusySignalOptions,
     options: js.Any = js.native
   ): js.Promise[T] = js.native

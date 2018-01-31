@@ -46,22 +46,19 @@ class CommandListener(
   val displayName: js.UndefOr[String] = js.undefined,
   val description: js.UndefOr[String] = js.undefined,
   val hiddenInCommandPalette: js.UndefOr[Boolean] = js.undefined
-)(callback: js.Any => Unit) extends js.Object {
-
-  def didDispatch(event: js.Any): Unit = callback(event)
-}
+)(val didDispatch: js.Function1[js.Any, Unit]) extends js.Object
 
 @js.native
 trait CommandRegistry extends js.Object {
   def add(
     target: String | Element,
     commandName: String,
-    listener: CommandListener | (js.Any => Unit)
+    listener: CommandListener | js.Function1[js.Any, Unit]
   ): Disposable = js.native
 
   def add(
     target: String | Element,
-    commands: js.Dictionary[js.Any => Unit]
+    commands: js.Dictionary[js.Function1[js.Any, Unit]]
   ): Disposable = js.native
 
   def dispatch(target: Element, commandName: String): Unit = js.native
@@ -105,19 +102,19 @@ trait Workspace extends js.Object {
    *  Invoke the given callback with all current and future text editors in
    *  the workspace.
    */
-  def observeTextEditors(callback: TextEditor => Unit): Disposable = js.native
+  def observeTextEditors(callback: js.Function1[TextEditor, Unit]): Disposable = js.native
 
   /**
    *  Invoke the given callback when a text editor becomes the active text editor and
    *  when there is no longer an active text editor.
    */
-  def onDidChangeActiveTextEditor(callback: js.UndefOr[TextEditor] => Unit): Disposable = js.native
+  def onDidChangeActiveTextEditor(callback: js.Function1[js.UndefOr[TextEditor], Unit]): Disposable = js.native
 
   /**
    *  Invoke the given callback with the current active text editor (if any), with all
    *  future active text editors, and when there is no longer an active text editor.
    */
-  def observeActiveTextEditor(callback: js.UndefOr[TextEditor] => Unit): Disposable = js.native
+  def observeActiveTextEditor(callback: js.Function1[js.UndefOr[TextEditor], Unit]): Disposable = js.native
 
   /** Get all text editors in the workspace. */
   def getTextEditors(): js.Array[TextEditor] = js.native
@@ -140,9 +137,9 @@ trait ConfigChange extends js.Object {
 @js.native
 trait Config extends js.Object {
 
-  def observe(keyPath: String, callback: js.Any => Unit): Disposable = js.native
-  def onDidChange(callback: ConfigChange => Unit): Disposable = js.native
-  def onDidChange(keyPath: String, callback: ConfigChange => Unit): Disposable = js.native
+  def observe(keyPath: String, callback: js.Function1[js.Any, Unit]): Disposable = js.native
+  def onDidChange(callback: js.Function1[ConfigChange, Unit]): Disposable = js.native
+  def onDidChange(keyPath: String, callback: js.Function1[ConfigChange, Unit]): Disposable = js.native
 
   def get(key: String, options: ConfigOptions = js.native): js.Any = js.native
   def set(key: String, value: js.Any = js.native, options: ConfigOptions = js.native): Boolean = js.native
@@ -159,7 +156,7 @@ trait Notification extends js.Object {
 
 class NotificationButton(
   val className: js.UndefOr[String] = js.undefined,
-  val onDidClick: js.UndefOr[() => Unit] = js.undefined,
+  val onDidClick: js.UndefOr[js.Function1[Unit, Unit]] = js.undefined,
   val text: js.UndefOr[String] = js.undefined
 ) extends js.Object
 
@@ -174,7 +171,7 @@ class NotificationOptions(
 @js.native
 trait NotificationManager extends js.Object {
 
-  def onDidAddNotification(callback: Notification => Unit): Disposable = js.native
+  def onDidAddNotification(callback: js.Function1[Notification, Unit]): Disposable = js.native
 
   // Adding Notifications
   def addInfo(msg: String, options: NotificationOptions = js.native): Notification = js.native
@@ -187,11 +184,27 @@ trait NotificationManager extends js.Object {
   def getNotifications(): js.Array[Notification] = js.native
 }
 
+class MenuItem (
+  val label: String,
+  val submenu: js.UndefOr[js.Array[MenuItem]] = js.undefined,
+  val command: js.UndefOr[String] = js.undefined
+) extends js.Object
+
+@js.native
+trait MenuManager extends js.Object {
+  /* Adds the given items to the application menu. */
+  def add(items: js.Array[MenuItem]): Disposable = js.native
+    
+  /* Refreshes the currently visible menu. */
+  def update(): Unit = js.native
+}
+
 @js.native
 @JSGlobal("atom")
 object Atom extends js.Object {
   val commands: CommandRegistry = js.native
   val config: Config = js.native
+  val menu: MenuManager = js.native
   val notifications: NotificationManager = js.native
   val workspace: Workspace = js.native
 
