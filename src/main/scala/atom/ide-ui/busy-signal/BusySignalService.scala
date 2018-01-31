@@ -13,16 +13,14 @@ class BusySignalService extends js.Object {
   def reportBusyWhile[T](
     title: String,
     f: js.Function1[Unit, js.Promise[T]],
-    // options?: BusySignalOptions,
-    options: js.Any = js.native
+    options: BusySignalOptions = js.native
   ): js.Promise[T] = js.native
 
   // Activates the busy signal. Set the title in the returned BusySignal
   // object (you can update the title multiple times) and dispose it when done.
   def reportBusy(
     title: String,
-    // options?: BusySignalOptions
-    options: js.Any = js.native
+    options: BusySignalOptions = js.native
   ): BusyMessage = js.native
 
 }
