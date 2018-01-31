@@ -9,6 +9,39 @@ trait Disposable extends js.Object {
   def dispose(): Unit = js.native
 }
 
+/**
+ *  An object that aggregates multiple Disposable instances together into a
+ *  single disposable, so they can all be disposed as a group.
+ */
+@js.native
+trait CompositeDisposable extends Disposable {
+  /**
+   *  Dispose all disposables added to this composite disposable.
+   *  If this object has already been disposed, this method has no effect.
+   */
+  override def dispose(): Unit = js.native
+  
+  // Managing Disposables
+  /**
+   *  Add disposables to be disposed when the composite is disposed.
+   *  If this object has already been disposed, this method has no effect.
+   */
+  def add(disposables: Disposable*): Unit = js.native
+  
+  /* Remove a previously added disposable. */
+  def remove(disposable: Disposable): Unit = js.native
+  
+  /* Alias to CompositeDisposable::remove. */
+  def delete(disposable: Disposable): Unit = js.native
+  
+  /*
+   *  Clear all disposables. They will not be disposed by the next call to
+   *  dispose.
+   */
+  def clear(): Unit = js.native
+}
+
+
 class CommandListener(
   val displayName: js.UndefOr[String] = js.undefined,
   val description: js.UndefOr[String] = js.undefined,
@@ -62,6 +95,35 @@ trait TextEditor extends js.Object {
   // Reading Text
   def getText(): String = js.native
   def getLineCount(): Long = js.native
+}
+
+/** Represents the state of the user interface for the entire window. */
+@js.native
+trait Workspace extends js.Object {
+  // Event Subscription
+  /**
+   *  Invoke the given callback with all current and future text editors in
+   *  the workspace.
+   */
+  def observeTextEditors(callback: TextEditor => Unit): Disposable = js.native
+
+  /**
+   *  Invoke the given callback when a text editor becomes the active text editor and
+   *  when there is no longer an active text editor.
+   */
+  def onDidChangeActiveTextEditor(callback: js.UndefOr[TextEditor] => Unit): Disposable = js.native
+
+  /**
+   *  Invoke the given callback with the current active text editor (if any), with all
+   *  future active text editors, and when there is no longer an active text editor.
+   */
+  def observeActiveTextEditor(callback: js.UndefOr[TextEditor] => Unit): Disposable = js.native
+
+  /** Get all text editors in the workspace. */
+  def getTextEditors(): js.Array[TextEditor] = js.native
+
+  /** Get the workspace center's active item if it is a TextEditor. */
+  def getActiveTextEditor(): js.UndefOr[TextEditor] = js.native
 }
 
 class ConfigOptions (
@@ -131,6 +193,7 @@ object Atom extends js.Object {
   val commands: CommandRegistry = js.native
   val config: Config = js.native
   val notifications: NotificationManager = js.native
+  val workspace: Workspace = js.native
 
   def inDevMode(): Boolean = js.native
   def inSafeMode(): Boolean = js.native
