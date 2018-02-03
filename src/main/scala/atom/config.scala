@@ -49,17 +49,20 @@ class Setting[T](
   }
 }
 
-class Group[P <: js.Object](
+class SettingsGroup[S <: ConfigSchema](
   val title: String,
-  val properties: P,
   val description: js.UndefOr[String] = js.undefined,
   val order: js.UndefOr[Int] = js.undefined,
+  schema: S,
 ) extends js.Object {
   final val `type`: String = "object"
+  final val properties = schema
 }
 
-object Group {
-  implicit def groupProps[P <: js.Object](gr: Group[P]): P = gr.properties
+object SettingsGroup {
+  implicit def groupProps[S <: ConfigSchema](gr: SettingsGroup[S]): S = gr.properties
+}
+
 
 class ConfigSchema extends js.Object { conf: Singleton =>
 
