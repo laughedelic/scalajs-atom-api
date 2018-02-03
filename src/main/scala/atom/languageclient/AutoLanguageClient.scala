@@ -5,6 +5,7 @@ import io.scalajs.RawOptions
 import io.scalajs.nodejs.{ child_process => cp }
 import io.scalajs.nodejs.net
 import laughedelic.atom.ide.ui.busysignal
+import laughedelic.atom.TextEditor
 
 // https://github.com/atom/atom-languageclient/blob/master/lib/auto-languageclient.js
 @js.native @JSImport("atom-languageclient", "AutoLanguageClient")
@@ -53,20 +54,17 @@ class AutoLanguageClient extends js.Object {
   val busySignalService: js.UndefOr[busysignal.BusySignalService] = js.native
 
   /** Determine whether we should start a server for a given editor if we don't have one yet */
-  // TODO: editor: atom$TextEditor
-  def shouldStartForEditor(editor: js.Any): Boolean = js.native
+  def shouldStartForEditor(editor: TextEditor): Boolean = js.native
 
   /** Return the parameters used to initialize a client - you may want to extend capabilities */
   // TODO: return ls.InitializeParams
   def getInitializeParams(projectPath: String, process: cp.ChildProcess): js.Any = js.native
 
   /** Early wire-up of listeners before initialize method is sent */
-  // TODO: connection: ls.LanguageClientConnection
-  def preInitialization(connection: js.Any): Unit = js.native
+  def preInitialization(connection: LanguageClientConnection): Unit = js.native
 
   /** Late wire-up of listeners after initialize method has been sent */
-  // TODO: server: ActiveServer
-  def postInitialization(server: js.Any): Unit = js.native
+  def postInitialization(server: ActiveServer): Unit = js.native
 
   /** Determine whether to use ipc, stdio or socket to connect to the server */
   // TODO: return ConnectionType = 'stdio' | 'socket' | 'ipc'
@@ -80,21 +78,21 @@ class AutoLanguageClient extends js.Object {
   def getLogger(): Logger = js.native
 
   // Starts the server by starting the process, then initializing the language server and starting adapters
-  // TODO: return js.Promise[ActiveServer]
-  def startServer(projectPath: String): js.Promise[js.Any] = js.native
+  def startServer(projectPath: String): js.Promise[ActiveServer] = js.native
 
   def captureServerErrors(childProcess: cp.ChildProcess): Unit = js.native
   def handleSpawnFailure(err: js.Any): Unit = js.native
 
-  // TODO: editor: atom$TextEditor
-  def shouldSyncForEditor(editor: js.Any, projectPath: String): Boolean = js.native
+  def shouldSyncForEditor(editor: TextEditor, projectPath: String): Boolean = js.native
 
-  // TODO: editor: atom$TextEditor
-  def isFileInProject(editor: js.Any, projectPath: String): Boolean = js.native
+  def isFileInProject(editor: TextEditor, projectPath: String): Boolean = js.native
 
   /** `didChangeWatchedFiles` message filtering, override for custom logic.
    * @param filePath path of a file that has changed in the project path
    * @return false => message will not be sent to the language server
    */
   def filterChangeWatchedFiles(filePath: String): Boolean = js.native
+  
+  // Gets a LanguageClientConnection for a given TextEditor
+  def getConnectionForEditor(editor: TextEditor): js.Promise[js.UndefOr[LanguageClientConnection]] = js.native
 }
