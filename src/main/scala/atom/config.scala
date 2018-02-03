@@ -38,6 +38,8 @@ class Setting[T](
 )(implicit tpe: SettingType[T]) extends js.Object {
   final val `type`: String = tpe.name
 
+  final val label: js.UndefOr[String] = js.undefined
+
   final val items = tpe.itemsType.map { it =>
     js.Dynamic.literal(
       `type` = it,
@@ -58,4 +60,19 @@ class Group[P <: js.Object](
 
 object Group {
   implicit def groupProps[P <: js.Object](gr: Group[P]): P = gr.properties
+
+class ConfigSchema extends js.Object { conf: Singleton =>
+
+  def init(prefix: String): ConfigSchema = {
+    conf.asInstanceOf[js.Dictionary[js.Dynamic]]
+      .foreach { case (key, value) =>
+        val newPrefix = s"${prefix}.${key}"
+        if (value.isInstanceOf[Setting[_]])
+          value.updateDynamic("label")(newPrefix)
+        else if (value.isInstanceOf[SettingsGroup[_]])
+          value.asInstanceOf[SettingsGroup[ConfigSchema]]
+            .properties.init(newPrefix)
+      }
+    conf
+  }
 }
