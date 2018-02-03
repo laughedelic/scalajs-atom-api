@@ -1,6 +1,7 @@
 package laughedelic.atom.ide.scala
 
 import scala.scalajs.js, js.annotation._, js.Dynamic.global, js.|
+import laughedelic.atom.Atom
 
 class SettingType[T](
   val name: String,
@@ -46,6 +47,28 @@ class Setting[T](
       minimum = minimum.asInstanceOf[js.Any],
       maximum = maximum.asInstanceOf[js.Any],
     )
+  }
+}
+
+object Setting {
+  implicit class SettingOps[T](opt: Setting[T]) {
+
+    def get: T = {
+      opt.label
+        .map { Atom.config.get(_).asInstanceOf[T] }
+        .getOrElse(opt.default)
+    }
+
+    def set(value: T): Setting[T] = {
+      opt.label.foreach { Atom.config.set(_, value.asInstanceOf[js.Any]) }
+      opt
+    }
+
+    def unset: Unit = {
+      opt.label.foreach { Atom.config.unset(_) }
+    }
+
+    def update(upd: T => T): Setting[T] = set( upd(get) )
   }
 }
 
