@@ -20,7 +20,7 @@ class Setting[T](
 
   final val `type`: String = tpe.name
 
-  // final val label: js.UndefOr[String] = js.undefined
+  final val label: js.UndefOr[String] = js.undefined
 
   final val items = tpe.itemsType.map { it =>
     js.Dynamic.literal(
@@ -34,9 +34,7 @@ class Setting[T](
 object Setting {
 
   implicit class SettingOps[T](setting: Setting[T]) {
-
-    def label: String =
-      setting.asInstanceOf[js.Dynamic].label.asInstanceOf[String]
+    private def label: String = setting.label.get
 
     def get: T =
       Atom.config.get(label).asInstanceOf[T]
