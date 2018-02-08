@@ -25,5 +25,5 @@ object Color extends js.Object {
    *   and `alpha` properties.
    * @return a `Color` or `null` if it cannot be parsed.
    */
-  def parse(value: String | js.Object): Color = js.native
+  def parse(value: String | js.Object): Color | Null = js.native
 }
