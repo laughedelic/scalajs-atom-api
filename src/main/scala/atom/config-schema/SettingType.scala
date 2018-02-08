@@ -1,6 +1,6 @@
 package laughedelic.atom.config
 
-import scala.scalajs.js
+import scala.scalajs.js, js.|
 import laughedelic.atom.Color
 
 class SettingType[T](
@@ -23,4 +23,11 @@ object SettingType {
     itemsType = tpe.name,
   )
 
+  implicit def aOrB[A, B](
+    implicit
+      tpa: SettingType[A],
+      tpb: SettingType[B],
+  ): SettingType[A | B] = new SettingType[A | B](
+    name = Seq(tpa.name, tpb.name).mkString("[", ",", "]")
+  )
 }
