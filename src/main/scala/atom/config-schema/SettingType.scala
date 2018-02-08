@@ -1,6 +1,7 @@
 package laughedelic.atom.config
 
 import scala.scalajs.js
+import laughedelic.atom.Color
 
 class SettingType[T](
   val name: String,
@@ -13,7 +14,7 @@ object SettingType {
   implicit val integer: SettingType[Int]     = new SettingType[Int]("integer")
   implicit val number:  SettingType[Double]  = new SettingType[Double]("number")
   implicit val boolean: SettingType[Boolean] = new SettingType[Boolean]("boolean")
-  // TODO: Color option (returns Color type from Atom core API)
+  implicit val color:   SettingType[Color]   = new SettingType[Color]("color")
 
   implicit def array[T](
     implicit tpe: SettingType[T]
