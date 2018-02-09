@@ -3,6 +3,12 @@ package laughedelic.atom
 import org.scalajs.dom.raw.Event
 import scala.scalajs.js
 
+sealed trait AnyContextMenuItem extends js.Object
+
+object ContextMenuSeparator extends AnyContextMenuItem {
+  final val `type`: String = "separator"
+}
+
 class ContextMenuItem (
   /* The menu item's label. */
   val label: js.UndefOr[String] = js.undefined,
@@ -36,7 +42,7 @@ class ContextMenuItem (
    *  given context menu deployment.
    */
   val shouldDisplay: js.UndefOr[js.Function1[Event, Boolean]] = js.undefined
-) extends js.Object
+) extends AnyContextMenuItem
 
 
 /* Provides a registry for commands that you'd like to appear in the context menu. */
