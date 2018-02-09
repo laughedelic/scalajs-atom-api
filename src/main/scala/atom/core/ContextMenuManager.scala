@@ -26,7 +26,7 @@ class ContextMenuItem (
   val enabled: js.UndefOr[Boolean] = js.undefined,
   
   /* An array of additional items. */
-  val submenu: js.UndefOr[js.Array[ContextMenuItem]] = js.undefined,
+  val submenu: js.UndefOr[js.Array[AnyContextMenuItem]] = js.undefined,
   
   /* Whether the menu item should appear in the menu. Defaults to true. */
   val visible: js.UndefOr[Boolean] = js.undefined,
@@ -48,5 +48,5 @@ class ContextMenuItem (
 /* Provides a registry for commands that you'd like to appear in the context menu. */
 @js.native
 trait ContextMenuManager extends js.Object {
-  def add(itemsBySelector: js.Dictionary[js.Array[ContextMenuItem]]): Disposable = js.native
+  def add(itemsBySelector: js.Dictionary[js.Array[AnyContextMenuItem]]): Disposable = js.native
 }
