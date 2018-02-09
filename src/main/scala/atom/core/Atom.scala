@@ -8,6 +8,7 @@ object Atom extends js.Object {
   val commands: CommandRegistry = js.native
   val config: Config = js.native
   val menu: MenuManager = js.native
+  val contextMenu: ContextMenuManager = js.native
   val notifications: NotificationManager = js.native
   val workspace: Workspace = js.native
 
