@@ -9,26 +9,16 @@ This project contains a few manually written facades for some Atom-related APIs.
 
 ## Facades
 
-* Some of the [core Atom APIs](https://atom.io/docs/api/) (see [src/.../atom/core/](src/main/scala/atom/core/)):
-    - `CommandRegistry`
-    - `CompositeDisposable`
-    - `Config`
-    - `Disposable`
-    - `MenuManager`
-    - `Notification`
-    - `NotificationManager`
-    - `TextEditor`
-    - `Workspace`
+* [Core Atom API](https://atom.io/docs/api)
+    Check [`src/.../atom/core/`](src/main/scala/atom/core/) to find what's covered.
+
 * [atom-languageclient](https://github.com/atom/atom-languageclient)
-    - `AutoLanguageClient`
-    - `ActiveServer`
-    - `LanguageClientConnection`
-    - `ServerCapabilities` and everything related to it
+    Complete `AutoLanguageClient` and some [other relevant parts](src/main/scala/atom/languageclient/)
+
 * [atom-ide-ui](https://github.com/facebook-atom/atom-ide-ui)
-  + [atom-ide-busy-signal](https://github.com/facebook-atom/atom-ide-ui/tree/master/modules/atom-ide-ui/pkg/atom-ide-busy-signal)
-      - `BusyMessage`
-      - `BusySignalOptions`
-      - `BusySignalService`
+    + [atom-ide-busy-signal](https://github.com/facebook-atom/atom-ide-ui/tree/master/modules/atom-ide-ui/pkg/atom-ide-busy-signal)
+
+* [atom-package-deps](https://github.com/steelbrain/package-deps)
 
 ## Usage
 
