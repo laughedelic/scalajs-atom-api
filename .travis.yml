@@ -3,22 +3,25 @@ jdk: oraclejdk8
 scala: 2.12.4
 
 stages:
-  - name: test
-  - name: release
+  - name: build
+  - name: publish
     if: ((branch = master) AND (type != pull_request)) OR (tag IS present)
+  - name: release
+    if: tag IS present
 
 jobs:
   include:
-    # default stage is test
-    - env: TEST="compile"
+    - stage: build
       script: sbt compile
-    # release only on merge commits or tags
-    - stage: release
+    - stage: publish
+      # release only on merge commits or tags
       script: if [[ "$(git rev-list --merges HEAD^..HEAD)" || "$TRAVIS_TAG" ]]; then sbt releaseEarly; else echo "skipping release"; fi
+    - stage: release
+      script: sbt githubRelease
 
 cache:
   directories:
-    - $HOME/.sbt/0.13/dependency
+    - $HOME/.sbt/1.0/dependency
     - $HOME/.sbt/boot/scala*
     - $HOME/.sbt/launchers
     - $HOME/.ivy2/cache
