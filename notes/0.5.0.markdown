@@ -1,0 +1,4 @@
+* #10: Added typed Config API for declaring a configuration schema and
+  reading/writing settings of the declared types
+* #11: Added `ContextMenuManager` (by @Jarlakxen)
+* #12: Added [atom-package-deps](https://github.com/steelbrain/package-deps) facade
