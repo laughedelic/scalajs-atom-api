@@ -96,6 +96,9 @@ class AutoLanguageClient extends js.Object {
   /** Gets a LanguageClientConnection for a given TextEditor */
   def getConnectionForEditor(editor: TextEditor): js.Promise[js.UndefOr[LanguageClientConnection]] = js.native
 
+  /** Restart all active language servers for this language client in the workspace */
+  def restartAllServers(): js.Promise[Unit] = js.native
+
   /** Return the name of your root configuration key */
   def getRootConfigurationKey(): String = js.native
 
