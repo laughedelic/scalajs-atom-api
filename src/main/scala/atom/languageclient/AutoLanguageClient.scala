@@ -92,7 +92,13 @@ class AutoLanguageClient extends js.Object {
    * @return false => message will not be sent to the language server
    */
   def filterChangeWatchedFiles(filePath: String): Boolean = js.native
-  
-  // Gets a LanguageClientConnection for a given TextEditor
+
+  /** Gets a LanguageClientConnection for a given TextEditor */
   def getConnectionForEditor(editor: TextEditor): js.Promise[js.UndefOr[LanguageClientConnection]] = js.native
+
+  /** Return the name of your root configuration key */
+  def getRootConfigurationKey(): String = js.native
+
+  /** Optionally transform the configuration object before it is sent to the server */
+  def mapConfigurationObject(configuration: js.Any): js.Any = js.native
 }
