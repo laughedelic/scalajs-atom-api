@@ -31,6 +31,21 @@ class Setting[T](
   }
 }
 
+/** A typed and safe version of [[ConfigChange]] */
+case class SettingChange[T](
+  val oldValue: Option[T],
+  val newValue: T,
+)
+
+object SettingChange {
+  def apply[T](change: ConfigChange): SettingChange[T] =
+    SettingChange[T](
+      // NOTE: old value may be undefined
+      js.defined(change.oldValue.asInstanceOf[T]).toOption,
+      change.newValue.asInstanceOf[T]
+    )
+}
+
 object Setting {
 
   implicit class SettingOps[T](setting: Setting[T]) {
@@ -51,8 +66,10 @@ object Setting {
     def observe(callback: js.Any => Unit): Disposable =
       Atom.config.observe(label, callback)
 
-    def onDidChange(callback: ConfigChange => Unit): Disposable =
-      Atom.config.onDidChange(label, callback)
+    def onDidChange(callback: SettingChange[T] => Unit): Disposable =
+      Atom.config.onDidChange(label, { change: ConfigChange =>
+        callback(SettingChange[T](change))
+      })
   }
 
 }
