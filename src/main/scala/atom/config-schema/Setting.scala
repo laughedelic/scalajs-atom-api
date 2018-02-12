@@ -3,6 +3,7 @@ package laughedelic.atom.config
 import scala.scalajs.js, js.|
 import laughedelic.atom.{ Atom, Disposable, ConfigChange }
 
+/** Used to enumerate allowed values of a setting with their descriptions */
 class AllowedValue[V](
   val value: V,
   val description: js.UndefOr[String] = js.undefined
@@ -31,6 +32,21 @@ class Setting[T](
   }
 }
 
+/** A typed and safe version of [[ConfigChange]] */
+case class SettingChange[T](
+  val oldValue: Option[T],
+  val newValue: T,
+)
+
+object SettingChange {
+  def apply[T](change: ConfigChange): SettingChange[T] =
+    SettingChange[T](
+      // NOTE: old value may be undefined
+      js.defined(change.oldValue.asInstanceOf[T]).toOption,
+      change.newValue.asInstanceOf[T]
+    )
+}
+
 object Setting {
 
   implicit class SettingOps[T](setting: Setting[T]) {
@@ -48,11 +64,15 @@ object Setting {
     def update(upd: T => T): Boolean =
       set( upd(get) )
 
-    def observe(callback: js.Any => Unit): Disposable =
-      Atom.config.observe(label, callback)
+    def observe(callback: T => Unit): Disposable =
+      Atom.config.observe(label, { value: js.Any =>
+        callback(value.asInstanceOf[T])
+      })
 
-    def onDidChange(callback: ConfigChange => Unit): Disposable =
-      Atom.config.onDidChange(label, callback)
+    def onDidChange(callback: SettingChange[T] => Unit): Disposable =
+      Atom.config.onDidChange(label, { change: ConfigChange =>
+        callback(SettingChange[T](change))
+      })
   }
 
 }
