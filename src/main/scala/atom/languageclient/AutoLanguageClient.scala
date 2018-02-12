@@ -83,6 +83,11 @@ class AutoLanguageClient extends js.Object {
   def captureServerErrors(childProcess: cp.ChildProcess): Unit = js.native
   def handleSpawnFailure(err: js.Any): Unit = js.native
 
+  /** * Called on language server stderr output.
+   * @param stderr a chunk of stderr from a language server instance
+   */
+  def handleServerStderr(stderr: String, projectPath: String): Unit = js.native
+
   def shouldSyncForEditor(editor: TextEditor, projectPath: String): Boolean = js.native
 
   def isFileInProject(editor: TextEditor, projectPath: String): Boolean = js.native
