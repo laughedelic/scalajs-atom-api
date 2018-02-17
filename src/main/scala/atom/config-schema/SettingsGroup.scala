@@ -2,17 +2,15 @@ package laughedelic.atom.config
 
 import scala.scalajs.js
 
-class SettingsGroup[S <: ConfigSchema](
+class SettingsGroup[S <: ConfigSchema](schema: S)(
   val title: js.UndefOr[String] = js.undefined,
-  val description: js.UndefOr[String] = js.undefined,
   val order: js.UndefOr[Int] = js.undefined,
   val collapsed: js.UndefOr[Boolean] = js.undefined,
-  schema: S,
 ) extends js.Object {
 
   final val `type`: String = "object"
 
-  final val properties = schema
+  final val properties: S = schema
 }
 
 object SettingsGroup {
