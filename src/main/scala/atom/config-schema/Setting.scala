@@ -13,14 +13,13 @@ class Setting[T](
   val default: T,
   val title:       js.UndefOr[String] = js.undefined,
   val description: js.UndefOr[String] = js.undefined,
-  val order:       js.UndefOr[Int] = js.undefined,
   val enum:        js.UndefOr[js.Array[T] | js.Array[AllowedValue[T]]] = js.undefined,
   val minimum:     js.UndefOr[T] = js.undefined,
   val maximum:     js.UndefOr[T] = js.undefined,
 )(implicit tpe: SettingType[T]) extends js.Object {
 
   final val `type`: String = tpe.name
-
+  final val order: js.UndefOr[Int] = js.undefined
   final val label: js.UndefOr[String] = js.undefined
 
   final val items = tpe.itemsType.map { it =>
