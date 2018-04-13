@@ -5,7 +5,12 @@ import laughedelic.atom.{ Atom, Disposable, ConfigChange }
 
 class ConfigSchema extends js.Object { conf: Singleton =>
 
-  def init(prefix: String): ConfigSchema = {
+  /** This method is supposed to be overriden to attach onDidChange hooks to
+    * the defined settings
+    */
+  def postInit(): Unit = ()
+
+  final def init(prefix: String): ConfigSchema = {
     conf.asInstanceOf[js.Dictionary[js.Dynamic]]
       .filter {
         case (_, value: js.Object) =>
@@ -22,6 +27,7 @@ class ConfigSchema extends js.Object { conf: Singleton =>
             value.asInstanceOf[SettingsGroup[ConfigSchema]]
               .properties.init(newPrefix)
       }
+    postInit()
     conf
   }
 
